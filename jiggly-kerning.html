@@ -1,0 +1,23 @@
+<!doctype html>
+<title>jiggly kerning when centered</title>
+<style>
+/*
+Bugzilla test case for kerning
+issues with text-align:center
+
+https://bugzilla.mozilla.org/show_bug.cgi?id=1167880
+*/
+
+*{
+  background-color: black;
+  color: white;
+}
+
+div {
+  font-size: 4em;
+  text-align: center;
+}
+</style>
+<div>Hello World!</div>
+
+<div>qwertyuiopasdfg</div>

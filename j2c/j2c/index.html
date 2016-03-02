@@ -1,0 +1,926 @@
+<!doctype html>
+<title>J2C — JavaScript to CSS Compiler</title>
+
+<!--[if lte IE 8]>
+<script src="https://cdn.polyfill.io/v1/polyfill.min.js"></script>
+<![endif]-->
+<meta name=viewport content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="//brick.a.ssl.fastly.net/Charter:400,700,400i,700i/Anonymous+Pro:400/Aileron:400,600" type="text/css">
+<script>
+var j2c=function(){"use strict";function t(t,e,r,l,s,a){l=[];for(a in e)if(f.call(e,a))for(s in t)f.call(t,s)&&l.push(n(t[s],e[a],r));return l}function n(t,n,e){return e&&(/^[-\w$]+$/.test(n)&&":-error-bad-sub-selector-"+n||/&/.test(n)&&n.replace(/&/g,t))||t+n}function e(t){return"-"+t.toLowerCase()}function r(t,n,l,s,a,o,i,u,g){if(null!=t)if(/\$/.test(l))for(g in l=l.split("$"))f.call(l,g)&&r(t,n,l[g],s,a,o);else switch(c.call(t=t.valueOf())){case h:for(i=0;i<t.length;i++)r(t[i],n,l,s,a,o);break;case p:l=l&&l+"-";for(i in t)if(f.call(t,i))if(u=t[i],/\$/.test(i))for(g in i=i.split("$"))f.call(i,g)&&r(u,n,l+i[g],s,a,o);else r(u,n,l+i,s,a,o);break;default:for(i=l.replace(/_/g,"-").replace(/[A-Z]/g,e),!a||"animation-name"!=i&&"animation"!=i||(t=t.split(",").map(function(t){return t.replace(/()(?::global\(\s*([-\w]+)\s*\)|()([-\w]+))/,o.l)}).join(",")),/^animation|^transition/.test(i)&&(s=["webkit"]),i=i.replace(/^@/,"*"),g=0;g<s.length;g++)n.push("-",s[g],"-",i,i?":":"",t,";\n");n.push(i,i?":":"",t,";\n")}}function l(t,n,e,r,l,a,o,i){var f;if(/^@(?:namespace|import|charset)$/.test(t))if(c.call(n)==h)for(f=0;f<n.length;f++)e.push(t," ",n[f],";\n");else e.push(t," ",n,";\n");else if(/^@keyframes /.test(t))t=o?t.replace(/( )(?::global\(\s*([-\w]+)\s*\)|()([-\w]+))/,i.l):t,e.push("@-webkit-",t.slice(1)," {\n"),s(n,e,"","",["webkit"]),e.push("}\n"),e.push(t," {\n"),s(n,e,"","",a,o,i),e.push("}\n");else if(/^@extends?$/.test(t)){for(;f=w.exec(l);)t=f[4];if(null==t||!o)return void e.push("@-error-cannot-extend-in-global-context ",JSON.stringify(l),";\n");if(/^@extends?$/.test(t))return void e.push("@-error-no-class-to-extend-in ",JSON.stringify(l),";\n");i.e(c.call(n)==h?n.map(function(t){return t.replace(/()(?::global\(\s*(\.[-\w]+)\s*\)|()\.([-\w]+))/,i.l)}).join(" "):n.replace(/()(?::global\(\s*(\.[-\w]+)\s*\)|()\.([-\w]+))/,i.l),t)}else/^@(?:font-face$|viewport$|page )/.test(t)?s(n,e,t,t,u):/^@global$/.test(t)?s(n,e,r,l,a,0,i):/^@local$/.test(t)?s(n,e,r,l,a,1,i):/^@(?:media |supports |document )./.test(t)?(e.push(t," {\n"),s(n,e,r,l,a,o,i),e.push("}\n")):e.push("@-error-unsupported-at-rule ",JSON.stringify(t),";\n")}function s(e,a,o,i,u,f,w){var m,b,d,$;switch(c.call(e)){case h:for(m=0;m<e.length;m++)s(e[m],a,o,i,u,f,w);break;case p:for(m in e)d=e[m],o&&/^[-\w$]+$/.test(m)?($||($=1,a.push(o||"*"," {\n")),r(d,a,m,u,f,w)):/^@/.test(m)?($=$&&a.push("}\n")&&0,l(m,d,a,o,i,u,f,w)):($=$&&a.push("}\n")&&0,s(d,a,(b=/,/.test(o)||o&&/,/.test(m))?t(o.split(","),(f?m.replace(/()(?::global\(\s*(\.[-\w]+)\s*\)|(\.)([-\w]+))/g,w.l):m).split(","),o).join(","):n(o,f?m.replace(/()(?::global\(\s*(\.[-\w]+)\s*\)|(\.)([-\w]+))/g,w.l):m,o),b?t(i.split(","),m.split(","),i).join(","):n(i,m,i),u,f,w));$&&a.push("}\n");break;case g:a.push(o||":-error-no-selector"," {\n"),r(e,a,"",u,f,w),a.push("}\n")}}function a(n){function e(t,n){for(n=0;n<l.length;n++)t=l[n](t)||t;return t.join("")}n=n||{};var l=[];return n.use=function(){for(var t=arguments,e=0;e<t.length;e++)l.push(t[e]);return n},n.sheet=function(t,n){1===arguments.length&&(n=t,t={});var r,l=m+b++,a={},o=[];for(r in t)r-0!=r-0&&f.call(t,r)&&(a[r]=t[r]);s(n,o,"","",u,1,{e:function(t,n){var e=a[n];a[n]=e.slice(0,e.lastIndexOf(" ")+1)+t+" "+e.slice(e.lastIndexOf(" ")+1)},l:function(t,n,e,r,s){return e?n+e:(a[s]||(a[s]=s+l),n+r+a[s].match(/\S+$/))}}),o=new String(e(o));for(r in a)f.call(a,r)&&(o[r]=a[r]);return o},n.inline=function(t,n,l){return 1===arguments.length&&(n=t,t={}),r(n,l=[],"",u,1,{l:function(n,e,r,l,s){return r?e+r:t[s]?e+l+t[s]:s}}),e(l)},n.prefix=function(n,e){return t(e.map(function(t){return"-"+t+"-"}).concat([""]),[n])},n}function o(t,n,e){return e={},e[t]=n,e}var i={},u=[],c=i.toString,f=i.hasOwnProperty,p=c.call(i),h=c.call(u),g=c.call(""),w=/()(?::global\(\s*(\.[-\w]+)\s*\)|(\.)([-\w]+))/g,m="_j2c_"+Math.floor(4294967296*Math.random()).toString(36)+"_"+Math.floor(4294967296*Math.random()).toString(36)+"_"+Math.floor(4294967296*Math.random()).toString(36)+"_"+Math.floor(4294967296*Math.random()).toString(36)+"_",b=0;return a.global=function(t){return":global("+t+")"},a.kv=o,a.at=function d(t,n,e){if(arguments.length<3){var r=d.bind.apply(d,[null].concat([].slice.call(arguments,0)));return r.toString=function(){return"@"+t+" "+n},r}return o("@"+t+" "+n,e)},a(a),delete a.use,a}();
+
+/*
+Copyright © 2015 Pierre-Yves Gérardy
+
+Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the “Software”),
+to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+DEALINGS IN THE SOFTWARE.
+*/
+</script>
+
+<script>
+
+// PocketGrid
+
+var border_box = {
+    "&, &:before, &:after":{
+        box_sizing:"border-box"
+    }
+}
+
+var pocketgrid = {
+    group: [
+        "*zoom: 1",
+        border_box,
+        {
+            ":before,:after": {
+                display: "table",
+                content: '""',
+                line_height: 0
+            },
+            ":after": {clear:"both"},
+            "list-style-type":"none",
+            margin$padding:0
+        }
+    ],
+    block: [
+        border_box,
+        {
+            float: "left",
+            width: "100%"
+        }
+    ]
+}
+
+pocketgrid.nested = [
+    pocketgrid.group,
+    {
+        clear: "none",
+        float: "left",
+        margin: "0 !important"
+    }
+]
+
+/*!
+PocketGrid 1.1.0 Copyright (c) 2013 Arnaud Leray
+j2c port Copyright (c) 2015 Pierre-Yves Gérardy
+
+Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the "Software"),
+to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included
+in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+</script>
+
+<script>
+
+// Styles for the static part of the pages
+
+var isFF = (typeof InstallTrigger !== 'undefined'),
+    isIElt10 = (document.all && !window.atob);
+
+if (isIElt10){ // lte 8, really.
+    document.createElement('header');
+    document.createElement('footer');
+}
+
+//fake text outline using shadows.
+function outline(w, bl, co){ // width, blur, color
+    w = w / 1000;
+    bl = bl / 1000;
+
+    var FFcorrection = 5/4;
+    
+    var top = isFF ? w *FFcorrection : w, // In FF, the pseudo-outline is slightly thinner on top.
+        dg = (""+w / 1.3).slice(0,4), // diagonal, divide by ~sqrt(2) (it looks better with 1.3)
+        topdg = isFF ? dg * FFcorrection : dg;
+    // This one is ugly :-/
+    return [
+        // IE only supports up to 4 text shadows. We put the
+        // diagonal ones first because it looks nicer.
+        ""  + topdg + "em "  + dg + "em " + bl + "em " + co,
+        "-" + dg + "em "  + dg + "em " + bl + "em " + co,
+        ""  + topdg + "em -" + topdg + "em " + bl + "em " + co,
+        "-" + dg + "em -" + topdg + "em " + bl + "em " + co,
+        "" + top + "em 0 "    + bl + "em " + co,
+        "0 "  + w   + "em " + bl + "em " + co,
+        "-" + w + "em 0 " + bl + "em " + co,
+        "0 -" + top + "em " + bl + "em " + co,
+    ].join() + ";"
+}
+// 
+var logo = {
+    // Since we use shadows to fake the outline, use a fallback color for 
+    // CSS2 browsers.
+    // IE9 supports CSS3 colors, but not text shadows, hence the last item.
+    color: ["#9cf", "rgba(255,255,255,1)", isIElt10 && "#9cf"],
+    two_color: ["#24f", "rgba(255,255,255,1)", isIElt10 && "#24f"],
+    subtitle_color: "#357",
+    bg_color: "#ff8",
+    mainbg: j2c.prefix("linear-gradient(45deg, #ff8, #fb6)", ["webkit"]),
+    bg: j2c.prefix("linear-gradient(225deg, #ff8, #fb6)", ["webkit"]),
+    bg2: j2c.prefix("linear-gradient(225deg, #ff8 50%, #fb6 100%)", ["webkit"]),
+    JCOutline: outline(13, 6, "#9cf"),
+    _2Outline: outline(13/0.643, 6/0.643, "#adf"),
+    h2Outline: outline(40, 20, "#7ad"),
+    h6Outline: outline(45, 15, "#357"),
+    JCOutlineHover: outline(40, 20, "#bdf"),
+    _2OutlineHover: outline(40/0.643, 20/0.643, "#cef")
+}
+
+var pagestyle = j2c.sheet({"@global": {
+    "@font-face":[
+        {
+            font: {
+                family: "'Dosis'",
+                style: "normal",
+                weight: 500
+            },
+            src: "local('Dosis Medium'), local('Dosis-Medium'), url(data:font/truetype;base64,AAEAAAAOAIAAAwBgR0RFRgARAAIAAARkAAAAFkdQT1PYSudjAAAEfAAAAGxHU1VCABUACgAABOgAAAAMT1MvMoqCeA4AAAI0AAAAYGNtYXAAYwCZAAAClAAAADxnYXNwAAMABwAABFgAAAAMZ2x5Zn9PVS0AAADsAAAAuGhlYWT428GxAAABzAAAADZoaGVhB5cCyQAAAhAAAAAkaG10eAV7AIQAAAIEAAAADGxvY2EAMwBcAAABxAAAAAhtYXhwAiwESAAAAaQAAAAgbmFtZRrTNq0AAALQAAABaHBvc3T/3QAaAAAEOAAAACAAAQBA//oB7wLbACIAADcRNDYzMhYVFAYjIicmIyIVERQzMj4CNzYzMhYVFAYjIiZAd2BidhQWKAIGfIWIJzQZCAMDJxYUd2Jfd9QBLXBqY0sbEx1zjv7TjhYqHhkdFBtMZWoAAAAAAQAU//oBwwLbABsAADc0NjMyFRQWMzI1ESMiJjU0MzMyFhURFAYjIiYUFRUqRT6Egg4PHbAPF3VgYnixFxIdNUKOAbsWESUQDv4XcWllAAAAAAEAAAADAGwABwAAAAAAAgABAAIAIAAAAgAD2AAAAAAAAAAAADMAXAABAAAAAQGJXP+4El8PPPUAHwPoAAAAAMqKZMYAAAAAy40Xb/95/xMEGAP7AAAACAACAAAAAAAAAWEAMAITAEACBwAUAAEAAAQD/xMAAAQ5/3n/eQQYAAEAAAAAAAAAAAAAAAAAAAADAAMByQH0AAUAAAK8AooAAACMArwCigAAAd0AMgD6CAACAQYDAgICBgADoAAAv1AAIHsAAAAAAAAAAFBZUlMAQAAA+wIEA/8TAAAEAwDtIAAAkwAAAAAB2gLbAAAAIAACAAAAAgAAAAMAAAAUAAMAAQAAABQABAAoAAAABgAEAAEAAgBDAEr//wAAAEMASv///77/uAABAAAAAAAAAAAABwBaAAMAAQQJAAEACgAAAAMAAQQJAAIADAAKAAMAAQQJAAMAegAWAAMAAQQJAAQAGACQAAMAAQQJAAUAGgCoAAMAAQQJAAYAGADCAAMAAQQJAA4ANADaAEQAbwBzAGkAcwBNAGUAZABpAHUAbQBFAGQAZwBhAHIAVABvAGwAZQBuAHQAaQBuAG8ALABQAGEAYgBsAG8ASQBtAHAAYQBsAGwAYQByAGkALABJAGcAaQBuAG8ATQBhAHIAaQBuAGkAOgAgAEQAbwBzAGkAcwAgAE0AZQBkAGkAdQBtADoAIAAyADAAMQAxAEQAbwBzAGkAcwAgAE0AZQBkAGkAdQBtAFYAZQByAHMAaQBvAG4AIAAxAC4AMAAwADcARABvAHMAaQBzAC0ATQBlAGQAaQB1AG0AaAB0AHQAcAA6AC8ALwBzAGMAcgBpAHAAdABzAC4AcwBpAGwALgBvAHIAZwAvAE8ARgBMAAMAAAAAAAD/2gAaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAQAAv//AAMAAQAAAAwAAAAAAAAAAQABAAIAAQABAAAAAQAAAAoAHgAsAAFsYXRuAAgABAAAAAD//wABAAAAAWtlcm4ACAAAAAEAAAABAAQAAgAAAAEACAACACIABAAAACoAKgADAAMAAAAAAAAAAAAAAAAAAAAAAAAAAQACAAEAAgABAAEAAgABAAIAAQAAAAoACgAKAAA=) format('truetype')"
+        },
+        {
+            font: {
+                family: "'Dosis'",
+                style: "normal",
+                weight: 700
+            },
+            src: "local('Dosis Bold'), local('Dosis-Bold'), url(data:font/truetype;base64,AAEAAAAOAIAAAwBgR0RFRgAPAAIAAAQEAAAAFEdQT1MAFQAKAAAEGAAAAAxHU1VCABUACgAABCQAAAAMT1MvMotKegUAAAHsAAAAYGNtYXAADACFAAACTAAAADRnYXNwAAMABwAAA/gAAAAMZ2x5ZrZShLMAAADsAAAAdGhlYWT5EsGpAAABiAAAADZoaGVhB80C9AAAAcgAAAAkaG10eAN/AEAAAAHAAAAACGxvY2EAOgAAAAABgAAAAAZtYXhwAisERAAAAWAAAAAgbmFtZRjfNNwAAAKAAAABWHBvc3T/3QAaAAAD2AAAACAAAQAbAAAB4QLbACkAADc1NDY3NzY2NTQmIyIGFRQGIyI1NDYzMhYVFA4DFRUhMhYUBiMhIiYbQi9gL0IvLicyJR87gFdbhUFeXUEBFhAZGRD+nBMmKWEsViNFI04nIzYsLBMdRlJmb1w8aUk+PhwYIS4jGAABAAAAAgBoAAcAAAAAAAIAAQACACAAAAIAA9gAAAAAAAAAAAA6AAAAAQAAAAEBiaWBLdpfDzz1AB8D6AAAAADKimTQAAAAAMuNF2T/fP8TBEsD9AABAAgAAgAAAAAAAAGEACUB+wAbAAEAAAQD/xMAAARk/3z/egRLAAEAAAAAAAAAAAAAAAAAAAACAAMB3wK8AAUAAAK8AooAAACMArwCigAAAd0AMgD6CAACAQgDAgICBgADoAAAv1AAIHsAAAAAAAAAAFBZUlMAIAAA+wIEA/8TAAAEAwDtIAAAkwAAAAAB2wLbAAAAIAACAAAAAgAAAAMAAAAUAAMAAQAAABQABAAgAAAABAAEAAEAAAAy//8AAAAy////zwABAAAAAAAAAAcAWgADAAEECQABAAoAAAADAAEECQACAAgACgADAAEECQADAHYAEgADAAEECQAEABQAiAADAAEECQAFABoAnAADAAEECQAGABQAtgADAAEECQAOADQAygBEAG8AcwBpAHMAQgBvAGwAZABFAGQAZwBhAHIAVABvAGwAZQBuAHQAaQBuAG8ALABQAGEAYgBsAG8ASQBtAHAAYQBsAGwAYQByAGkALABJAGcAaQBuAG8ATQBhAHIAaQBuAGkAOgAgAEQAbwBzAGkAcwAgAEIAbwBsAGQAOgAgADIAMAAxADEARABvAHMAaQBzACAAQgBvAGwAZABWAGUAcgBzAGkAbwBuACAAMQAuADAAMAA2AEQAbwBzAGkAcwAtAEIAbwBsAGQAaAB0AHQAcAA6AC8ALwBzAGMAcgBpAHAAdABzAC4AcwBpAGwALgBvAHIAZwAvAE8ARgBMAAMAAAAAAAD/2gAaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAQAAv//AAMAAQAAAAwAAAAAAAAAAQABAAEAAQABAAAACgAKAAoAAAABAAAACgAKAAoAAA==) format('truetype')"
+        }
+    ],
+    " html": {
+        overflow_x: "hidden",
+        height:"100%"
+    },
+    " body":{
+        margin$padding: 0,
+        font_family:"Charter, sans-serif",
+        height:"100%",
+        "& code, & pre":{
+            font_family: "'Anonymous Pro', monospaced !important"
+        },
+        "& hr":{
+            border:0,
+            height:0,//"1px",
+            background_color:"#ddd"
+        },
+    },
+    " header": [
+        {
+            background_color: logo.bg_color,
+            display: "block",
+            overflow: "hidden",
+            padding:0,
+            z_index:"-2",
+
+
+            "@media (min-width:48.001em)": {
+                border_bottom: "1px dotted "+ "#dd5",
+                height:"17em"
+            },
+
+            " .container":[
+                pocketgrid.group,
+                {
+                    margin: "0 auto",
+                    max_width:"48em",
+                    padding:0,
+                    position:"relative"
+                }
+            ],
+
+            " h2, h6": [
+                pocketgrid.block,
+                {
+                    font_family: "Aileron, sans-serif",
+                    text_align: "center",
+                    z_index:6,
+                    "@media (min-width:48.001em)": {
+                        width:"60%"
+                    }
+                }
+            ],
+
+            " h2":{
+                color: "#fff",
+                font_size: "2.4em",
+                text_shadow: logo.h2Outline,
+                "@media (min-width:48.001em)": {
+                    font_size: "3em",
+                    margin: {
+                        top: "0.78em",
+                        bottom: "0.62em"
+                    }
+                }
+            },
+
+            " h6": {
+                background_color:"#fff",
+                color: "#fff",
+                font_size: "1.6em",
+                margin:0,
+                padding_top:"0.5em",
+                text_shadow: logo.h6Outline,
+                "@media (min-width:48.001em)": {
+                    background_color: "transparent",
+                    padding_top:0
+                }
+            },
+            " .logo": [
+                pocketgrid.block,
+                {
+                    position: "relative",
+                    "@media (min-width:48.001em)": {
+                        width:"40%"
+                    }
+                }
+            ],
+            " h1": [
+                {
+                    background: logo.bg2,
+                    color: logo.color,
+                    font:{
+                        family: "Dosis, sans-serif",
+                        size: "18em",
+                        weight: 500
+                    },
+                    line_height: 0.8,
+                    height:"1.0em",
+                    margin: "0 auto",
+                    padding_left:"0.025em",
+                    postion: "relative",
+                    text_shadow: logo.JCOutline,
+                    width: "1.036em",
+                    z_index:3,
+                    _o$_ms$_moz$_webkit$: {
+                        user_select: "none"
+                    },
+
+                    " .Jay, .Cee, .two": {
+                        transition: "all 0.15s"
+                    },
+
+                    ":hover": {
+                        " .Jay, .Cee": {text_shadow: logo.JCOutlineHover},
+                        " .two": {text_shadow: logo._2OutlineHover}
+                    },
+
+
+                    " .Jay": {
+                        display:"inline-block",
+                        position:"relative",
+                        ":after": {
+                            content:'"J"',
+                            margin_left:"-0.025em",
+                            padding_left:"0.025em"
+                        },
+                        ":before":{
+                            background:logo.bg,
+                            bottom:"-0.2em",
+                            width:"0.537em",
+                            right:"-100.5%",
+                            content:'" "',
+                  }
+                    },
+                    " .two":{
+                        color: logo.two_color,
+                        font: {
+                            size: "0.643em",
+                            weight: 700
+                        },
+                        margin_left: "-0.273em",
+                        padding_top: "0.36em",
+                        position: "absolute",
+                        text_shadow: logo._2Outline,
+                        z_index: 4
+                    },
+
+                    " .Cee": {
+                        color: logo.color,
+                        display:"inline-block",
+                        margin_left: "-0.015em",
+                        position: "relative",
+                        width:"0.525em",
+                        ":after": {
+                            content:'"C"',
+                            width:"0.538em"
+                        },
+                    }
+                }
+            ],
+            " h1 .Jay, h1 .Cee": {
+                ":after": [{
+                    background_color:  logo.bg_color,
+                    display: "block",
+                    height: "0.49em",
+                    line_height: 1,
+                    overflow: "hidden",
+                    position: "absolute",
+                    bottom:"42%"
+                },{"background":logo.bg}],
+                ":before": {
+                    background_color:  logo.bg_color,
+                    bottom:"-0.2em",
+                    display: "block",
+                    height: "0.57em",
+                    line_height: 1,
+                    overflow: "hidden",
+                    position: "absolute",
+                    z_index:0
+                }
+            }
+        },
+        {"background":logo.mainbg}
+        // ,
+        // pocketgrid.block
+    ],
+    " .main":[
+        {
+            margin: "0 auto",
+            max_width:"48em",
+            position:"relative",
+            line_height:"1.5em",
+            padding:[0, {left$right:"1em"}],
+            "> *":{
+                font_size:"1.3em",
+            },
+            " h3, h4, h5, h6":{
+                font_family: "Aileron"
+            },
+            " h3":{
+                border:{top$bottom:"6px solid #ccc"},
+                font_weight:400,
+                padding:{top$bottom:"12px"}
+            },
+            " h4:before":{content:'"> "'},
+            " #playground>*:after": {
+              content: "",
+              display: "table",
+              clear: "both"
+            },
+            " .wrapperNode":[
+              pocketgrid.group,
+            ],
+
+            " .codeNode, .styleNode":[
+                pocketgrid.block,
+                {
+                  border: [
+                    "10px solid #fb6",
+                    {radius: "10px"}
+                  ],
+                  display: "table-cell",
+                  height: "100%",
+                  margin_bottom:"1em",
+                  position: "relative",
+                  "&:after": {
+                      background_color: ["#fff","rgba(255,255,255,0.6)"],
+                      border:{
+                        left$right:"5px solid white"
+                      },
+                      color: "#44b",
+                      display:"block",
+                      font_size:"0.9em",
+                      padding: {"left$right": "10px"},
+                      position: "absolute",
+                      right: "20px",
+                      top: "-20px"
+                  },
+
+                  " .CodeMirror":{
+                    height: "inherit",
+
+                    "@media  (min-width:48.001em)":{
+                        // height: "20em"
+                    }
+                }
+              }
+            ],
+            " .codeNode": {
+                border_color: "#fb6",
+                "&:after": {
+                  border_color: "#fff",
+                  content: "'js' !important"
+                }
+            },
+            " .styleNode": {
+                border_color: "#ff8",
+                "&:after": {
+                  border_color: "#fff",
+                  content: "'css' !important"
+                }
+            }
+            // "@media  (min-width:48.001em)":{
+            //     " .codeNode, .styleNode": {
+            //         width:"50%"
+            //     },
+            //     " .codeNode": {
+            //         border: {
+            //           right_width:"6px",
+            //           top$bottom: {right_radius: 0}
+            //         }
+            //     },
+            //     " .styleNode": {
+            //         border: {
+            //           left_width:"6px",
+            //           top$bottom: {left_radius: 0}
+            //         }
+            //     }
+            // }
+        }
+    ],
+    " footer":{
+        background: logo.mainbg,
+        border_top: "1px dotted "+ "#dd5",
+        color: "#446",
+        font_family: "'Anonymous Pro', sans-serif !important",
+        margin_top: "4em",
+        padding: {bottom$top: "1em"},
+        text: {
+          align: "center",
+          // shadow: logo.h6Outline
+        },
+        "& a":{
+          color: "#668"
+        }
+    },
+    ".ghribbon":{
+        background_color:"#a00",//logo.subtitle_color,
+        font: {
+            family: "sans-serif",
+            weight: 400
+        },
+        left: "-6.9em",
+        line_height: "0.7em",
+        position:"absolute",
+        top: "2.2em",
+        transition: "all 0.5s",
+        width:"20em",
+        _o$_ms$_moz$_webkit$: {
+            box_shadow: "0 0 10px rgba(0,0,0,0.6)",
+            transform: "rotate(-45deg) scaleX(0.85)",
+            user_select: "none"
+        },
+        ":hover": {
+            box_shadow: "0 0 8px rgba(0,0,0,0.6)"
+        },
+        " a": {
+            border:"solid 1px rgba(255,255,255,0.65)",
+            color:"#f8f8f8",
+            display:"block",
+            font_size: "90%",
+            line_height: "0.8em",
+            margin:"2px auto",
+            padding:"8px 50px",
+            position:"relative",
+            text: {
+                align:"center",
+                decoration: "none",
+                shadow: "0 0 3px rgba(0, 0, 0, 1)"
+            },
+            transition: "all 0.3s",
+            width:"15em",
+            ":hover,:hover::before": {
+                border:"solid 1px #fff",
+                color:"#fff",
+                text: {
+                    shadow: "0 0 5px rgba(255,255,255,0.3)"
+                }
+            },
+            "::before": {
+                height$width: "100%",
+
+                border: "dashed 1px  rgba(255,255,255,0.45)",
+                content: "' '",
+                margin: {top: "-9px", left: "-6em"},
+                position: "absolute",
+            },
+            "::after": {
+                content:"' '",
+                display:"block",
+                height: "7em",
+                left:0,
+                position: "absolute",
+                top: "-4em",
+                width: "100%",
+            }
+        },
+        "@media (min-width:64em)":{
+            position:"fixed"
+        }
+    },
+}})
+
+var css = pagestyle;
+    head = document.head || document.getElementsByTagName('head')[0],
+    style = document.createElement('style');
+
+style.type = 'text/css';
+if (style.styleSheet){
+  style.styleSheet.cssText = css;
+} else {
+  style.appendChild(document.createTextNode(css));
+}
+
+head.appendChild(style);
+</script>
+<header>
+    <div class="container">
+        <div class="logo">
+            <h1 class="hollow"><span class="Jay">J</span><span class="two">2</span><span class="Cee">C</span></h1>
+        </div>
+        <h2>Small CSS-in-JS solution</h2>
+        <h6>1.3KB down the line</h6>
+    </div>
+</header>
+<div class="main">
+<p><code>j2c</code> is a CSS-in-JS library. It provides a sizable subset of SASS in a tiny package.</p>
+<p>Mixins, nested rules, composablity are available out of the box.</p>
+<p>Classe names and animations are localized by default, PostCSS style.</p>
+
+<p>Here's a short sample of what it can do. Check the <a href="https://github.com/j2css/j2c">github repo</a> for the full documentation.</p>
+
+<noscript id="rawdocs"><pre>
+----
+
+### Inline styles
+
+`j2c.inline()` creates inline styles.
+
+Underscores are converted to dashes so that property names can be left unquoted.
+
+Arrays ensures that properties are ordered properly. Order can't be guaranteed for objects.
+
+You can play with the code samples live.
+
+```JavaScript
+j2c.inline({
+  background_color:"red",
+  border: [
+    "1px solid grey",
+    {left_width: "3px"}
+  ]
+})
+```
+
+```CSS
+border: 1px solid grey;
+border-left-width: 3px;
+background-color: red;
+```
+
+You can also use arrays to insert mixins.
+
+----
+
+### Building a style sheet
+
+`j2c.sheet()` creates a style sheet.
+
+Nested selectors and at-rules are supported.
+
+Arrays can also be used where needed for mixins (not shown here).
+
+```JavaScript
+j2c.sheet({"@global": {
+  ".foo": {
+    color: "red",
+    "@media  (min-width:48.01em)": {
+      color: "green"
+    },
+    "& .bar,& .baz": {
+      text_decoration: "underline"
+    }
+  }
+}})
+```
+
+```CSS
+.foo {
+    color: red;
+}
+
+.foo .bar,.foo .baz {
+    text-decoration: underline;
+}
+
+@media  (min-width:48.01em) {
+    .foo {
+        color: green;
+    }
+}
+```
+
+The `@global` pseudo at-rule prevents `j2c.sheet` from localizing class names.
+
+----
+
+### Scoped definitions:
+
+CSS class names live in a global namespace. Developers and designers have
+to be careful not to step on one another's feet, and meaningful, unique names are not
+easy to find.
+
+A potential solution is to use inline styles, but adding them all over the place in
+templates can be bulky, and they are less powerful than style sheets (no `@media` queries,
+no `:before` or `:hover` pseudo-elements, ...)
+
+`j2c` solves this problem by generating unique class names automatically.
+
+In the next example, `.foo` is converted to a unique yet recognizable one under the hood.
+
+```JavaScript
+sheet = j2c.sheet({
+  ".foo": {
+    color: "red",
+    "@media  (max-width:48em)": {
+      color: "green"
+    },
+    "& :global(.bar)": {
+      text_decoration: "underline"
+    }
+  }
+})
+```
+
+In another component:
+
+```JavaScript
+sheet = j2c.sheet({
+  ".foo": {
+    font_size:"2em",
+    ":before": {
+      content: '"Look Ma, no clash!"'
+    }
+  }
+})
+```
+
+See? No name clash :-)
+
+You can put `sheet` in a `<style>` element, and use `sheet.foo` as a class
+for your component/directive/whatever. `sheet.foo` will read something along
+`"foo_j2c_XXXX_N"`. Where the `XXXX_N` combo is globally unique.
+They are respectively a 128 bit random number and a counter.
+
+If you play with the live examples, you'll see the counter increment
+every time the sheet is updated.
+
+`j2c` can be included several times in the same page, and can also be used on the server
+to generate isomorphic componenents (but you'll have to overwrite the styles on hydration).
+
+#### Sharing a namespace between sheets.
+
+If you want several sheets to share the same scope, you can pass it as the second argument to `j2c.sheet()`. You can pass a sheet object returned by `j2c.sheet`, it will work just fine.
+
+```JavaScript
+// for the sake of example.
+sheet = j2c.sheet({foo: "myFOO"}, {
+  ".foo": {
+    font_size:"2em"
+  }
+}) 
+```
+
+[Find the full documentation on GitHub](https://github.com/j2css/j2c). Vendor prefixes,
+animations, CSS hacks and the mysterious dollar property combiner are also covered there.
+
+You may also want to check the source of this page for a medium-sized stlye sheet 
+written with `j2c` (mostly the logo and the GitHub ribbon).
+
+----
+
+### FAQ
+
+#### Why do you use underscores in property names?
+
+Actually, camelCase and dashes are supported too. I wanted property names to be allowed to be left unquoted.
+CamelCase may be more familiar for property names in JS, but, in practice, underscores are nicer to work with:
+- when pasting CSS in your JS source
+- when refactoring from `{text_decoration: "none"}` to
+
+```JSON
+{
+  text: {
+    align: "center",
+    decoration: "none"
+  }
+}
+```
+and back.
+
+Note however that some automated CSS 2 JS tools use CamelCase, and thus it is also supported.
+
+#### There's another project called "j2c"
+
+There are at least three other programming-related things called "j2c": 
+- a [Java
+to C++ compiler](https://code.google.com/a/eclipselabs.org/p/j2c/), 
+- the
+[J2EE connector architecture](https://en.wikipedia.org/wiki/Java_EE_Connector_Architecture) and
+- the [JPEG 2000 codestream](http://fileformats.archiveteam.org/wiki/JPEG_2000_codestream).
+
+I believe that they are sufficiently different in scope for the naming collision
+not to be relevant.
+
+
+#### That's all, folks...
+
+...for now.
+
+If I were hip, this is where I'd intimate you to follow me on Twitter, but I don't
+post anything there :-)
+
+</pre></noscript>
+<div id="playground">Loading the docs...</div>
+<script src="combined.min.js"></script>
+<link rel="stylesheet" itemprop="stylesheet" href="codemirror.css"></link>
+<script>
+var unescape = (function() {
+  /*
+  unescape is borrowed from Underscore.js
+
+  Copyright (c) 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative
+  Reporters & Editors
+
+  Permission is hereby granted, free of charge, to any person
+  obtaining a copy of this software and associated documentation
+  files (the "Software"), to deal in the Software without
+  restriction, including without limitation the rights to use,
+  copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the
+  Software is furnished to do so, subject to the following
+  conditions:
+
+  The above copyright notice and this permission notice shall be
+  included in all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+  OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+  HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+  WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+  OTHER DEALINGS IN THE SOFTWARE.
+  */
+  var map = {
+    '&amp;': '&',
+    '&lt;': '<',
+    '&gt;': '>',
+    '&quot;': '"',
+    '&#x27;': "'",
+    '&#x60;': '`'
+  };
+  var list = ['&amp;','&lt;','&gt;','&quot;','&#x27;','&#x60;']
+  var escaper = function(match) {
+    return map[match];
+  };
+
+  var source = '(?:' + list.join('|') + ')';
+  var testRegexp = RegExp(source);
+  var replaceRegexp = RegExp(source, 'g');
+  return function(string) {
+    string = string == null ? '' : '' + string;
+    return testRegexp.test(string) ? string.replace(replaceRegexp, escaper) : string;
+  };
+})();
+
+function sanitize(source) {
+  return source.replace(/(\W)(while|for|eval)(\W)/g, "$1_$2_$3")
+}
+
+function _beautify(css){
+  var res = cssbeautify(css);
+  if (res === css) {
+    res = cssbeautify("p{"+css+"}", {indent:''})
+    res = res.slice(4, res.length-2)
+  }
+  return res;
+}
+
+function runcode(code, previous) {
+    var res;
+    try{
+        res = new Function(
+          'j2c', 'sheet',
+          'console', 'alert', 'window', 'document', 'undefined', 
+          "'use strict';  return (" + sanitize(code) + ");"
+        ).call(null, j2c);
+        if ("[object String]" !== {}.toString.call(res))  throw "string value expected";
+        return _beautify(res);
+    } catch (e) {
+        ERR = e
+        return "/* " + e + " */";
+    }
+}
+
+
+var md_parser = new commonmark.Parser()
+  , md_renderer = new commonmark.HtmlRenderer();
+
+playground.innerHTML = md_renderer.render(md_parser.parse(rawdocs.firstChild.data.slice(5, rawdocs.firstChild.data.length-6)));
+
+[].slice.call(playground.children).forEach(function(elt){
+    if (elt.tagName !== "PRE") return;
+    if (elt.children[0] && elt.children[0].tagName === "CODE" && elt.children[0].className === "language-CSS") {
+        elt.parentElement.removeChild(elt);
+    }
+    if (elt.children[0] && elt.children[0].tagName === "CODE" && elt.children[0].className === "language-JavaScript") {
+        var codeText = unescape(elt.children[0].innerHTML);
+        var styleText = ""
+        var wrapperNode = document.createElement("div");
+        var codeNode = document.createElement("div");
+        var styleNode = document.createElement("div");
+        wrapperNode.className = "wrapperNode";
+        codeNode.className = "codeNode";
+        styleNode.className = "styleNode";
+        var cm_style = CodeMirror(styleNode, {
+            value: runcode(codeText, ""),
+            mode:  "css",
+            readOnly:true
+        })
+        var cm_code = CodeMirror(codeNode, {
+            value:codeText,
+            mode: "javascript"
+        })
+        cm_code.on("change", function(code){
+            cm_style.setValue(runcode(code.getValue(), cm_style.getValue()))
+        })
+        wrapperNode.appendChild(codeNode);
+        wrapperNode.appendChild(styleNode);
+        elt.parentElement.insertBefore(wrapperNode, elt);
+        elt.parentElement.removeChild(elt);
+        cm_code.refresh();
+        cm_style.refresh();
+    }
+})
+</script>
+
+</div>
+<footer> Copyright &copy; 2015 <a href="mailto:j2c@py.gy">Pierre-Yves Gérardy</a></footer>
+
+<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:600&text=Fork%20menGitHub' rel='stylesheet' type='text/css'>
+<div class="ghribbon"><a href="https://github.com/j2css/j2c">Fork me on GitHub</a></div>
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-63587650-1', 'auto');
+ga('send', 'pageview');
+
+;(function(){
+var focused = false;
+function onFocus(){
+  if (!focused) {
+    setTimeout(function () {
+      _gaq.push([
+        '_trackEvent', 
+        'Control', 
+        'Bounce Rate', 
+        ''
+      ])
+    }, 30000)
+  }
+  focused = true;
+};
+
+if (/*@cc_on!@*/false) { // check for Internet Explorer
+  document.onfocusin = onFocus;
+} else {
+  window.onfocus = onFocus;
+}
+})();
+
+</script>

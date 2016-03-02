@@ -1,0 +1,58 @@
+<!doctype html>
+<title>J2C — JavaScript to CSS Compiler</title>
+
+<!--[if lte IE 8]>
+<script src="https://cdn.polyfill.io/v1/polyfill.min.js"></script>
+<![endif]-->
+
+<script src="https://cdn.rawgit.com/pygy/j2c/f84075582e21af6b3c89a58afb02f37b892c42df/dist/j2c.global.js"></script>
+<script src="mithril.js"></script>
+
+
+
+<p class="foo">Hello <span id="world"></span></p>
+
+<div id="scoped"></div>
+<script>
+var css = j2c.sheet({".foo":{color:"red"}}),
+    head = document.head || document.getElementsByTagName('head')[0],
+    style = document.createElement('style');
+
+style.type = 'text/css';
+if (style.styleSheet){
+  style.styleSheet.cssText = css;
+} else {
+  style.appendChild(document.createTextNode(css));
+}
+
+head.appendChild(style);
+
+m.mount(world, {view:function(){return m("span", {style:j2c({color:"green"})}, "Mithril + j2c World")}});
+
+var safecss = j2c.scoped({
+    foo:{color:"blue"}
+})
+
+
+console && console.log && console.log("Mounting Scoped")
+m.mount(scoped, {view:function(){
+    return m(
+        "span",
+        {class:safecss.foo},
+        [
+            m('style', {config:function(el, isInit){
+                if (!isInit) {
+                    console && console.log && console.log("Config running")
+                    // if no IE lte8 support is required `m('style', Widget.styles)`
+                    // does the trick.
+                    try { el.innerText = safecss
+                        //appendChild(document.createTextNode(safecss)) 
+                    } catch (e) { el.styleSheet.cssText = safecss }
+                }
+            }}),
+            "Safe scoped sheet."
+        ]
+        )
+}});
+
+</script>
