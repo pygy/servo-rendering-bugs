@@ -1,0 +1,7 @@
+<!doctype html>
+<title>Id attribute should be available as JS globals</title>
+<p id="foo">The script could not reach me through the <code>foo</code> global.<p>
+<script>
+if(typeof foo !== "undefined")
+    foo.innerHTML="Sucessfully updated by setting <code>foo.innerHTML</code>."
+</script>
